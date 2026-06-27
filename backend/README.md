@@ -7,6 +7,7 @@ calculer_devis.js          ← moteur de règles (JS, dans ton agent)
 generer_devis_pdf.py       ← générateur PDF (Python, côté serveur)
 
 Le PDF est structuré en 5 blocs :
+
 1 - En-tête — bande verte NEOTRAVEL avec numéro de devis auto-généré (D-YYYYMMDD-HH:MM)
 
 2 - Infos client — nom, email, téléphone du prospect (optionnel, vide si non fourni)
