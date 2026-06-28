@@ -1,0 +1,305 @@
+{
+  "name": "NeoTravel - Réception des demandes",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "nouvelle-demande",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "3d7f1d27-e7ba-4651-99ea-2cc091bd5289",
+      "name": "Webhook",
+      "webhookId": "4034ea9a-ae47-40ae-92ce-44bdc4920a5d"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appEA4UHhQ5awvhJC",
+          "mode": "list",
+          "cachedResultName": "CRM NeoTravel",
+          "cachedResultUrl": "https://airtable.com/appEA4UHhQ5awvhJC"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblkqFpvoBBJB1ZFj",
+          "mode": "list",
+          "cachedResultName": "Demandes",
+          "cachedResultUrl": "https://airtable.com/appEA4UHhQ5awvhJC/tblkqFpvoBBJB1ZFj"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nom": "= {{ $json.body.nom }}",
+            "Email": "={{ $json.body.email }}",
+            "Téléphone": "={{ $json.body.telephone }}",
+            "Destination": "={{ $json.body.destination }}",
+            "Nombre de passagers": "={{ $json.body.nombrePassagers }}",
+            "Source Demande": "Site Web",
+            "Statut": "Nouvelle",
+            "Date de départ": "={{ $json.body['Date de Depart'] }}",
+            "Historique des interactions": "="
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Nom",
+              "displayName": "Nom",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Téléphone",
+              "displayName": "Téléphone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Destination",
+              "displayName": "Destination",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Date de départ",
+              "displayName": "Date de départ",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Nombre de passagers",
+              "displayName": "Nombre de passagers",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Statut",
+              "displayName": "Statut",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Nouvelle",
+                  "value": "Nouvelle"
+                },
+                {
+                  "name": "Qualification en cours",
+                  "value": "Qualification en cours"
+                },
+                {
+                  "name": "Qualifié",
+                  "value": "Qualifié"
+                },
+                {
+                  "name": "Devis envoyé",
+                  "value": "Devis envoyé"
+                },
+                {
+                  "name": "Relance 1",
+                  "value": "Relance 1"
+                },
+                {
+                  "name": "Relance 2",
+                  "value": "Relance 2"
+                },
+                {
+                  "name": "Accepté",
+                  "value": "Accepté"
+                },
+                {
+                  "name": "Refusé",
+                  "value": "Refusé"
+                },
+                {
+                  "name": "Escalade Humaine",
+                  "value": "Escalade Humaine"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Source Demande",
+              "displayName": "Source Demande",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Site Web",
+                  "value": "Site Web"
+                },
+                {
+                  "name": "Appel téléphonique",
+                  "value": "Appel téléphonique"
+                },
+                {
+                  "name": "Email",
+                  "value": "Email"
+                },
+                {
+                  "name": "Réseaux Sociaux",
+                  "value": "Réseaux Sociaux"
+                },
+                {
+                  "name": "Autre",
+                  "value": "Autre"
+                },
+                {
+                  "name": "Site web",
+                  "value": "Site web"
+                },
+                {
+                  "name": "Téléphone",
+                  "value": "Téléphone"
+                },
+                {
+                  "name": "Partenaire",
+                  "value": "Partenaire"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Historique des interactions",
+              "displayName": "Historique des interactions",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Notes internes",
+              "displayName": "Notes internes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Devis",
+              "displayName": "Devis",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Relances",
+              "displayName": "Relances",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "94257a2a-d8a4-48b6-ae16-d09d2b57aa8a",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "k88v66ATbTWenFnK",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "b3cda366-e0ec-4c9a-8f83-947fc04ea63d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "131e4850f9c6161a10355b3de943780e16f0be9a52d2fad35491bd29144cc937"
+  },
+  "nodeGroups": [],
+  "id": "jsL9TQoUAB93AmSN",
+  "tags": []
+}
