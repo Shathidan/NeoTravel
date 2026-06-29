@@ -1,0 +1,445 @@
+"use client";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { T, fmtEUR } from "./theme";
+import { IcoSend, IcoDownload } from "./icons";
+import { askAssistant, newSessionId, mergeTrip } from "../../lib/n8n";
+import type { ChatTurn, TripData } from "../../lib/n8n";
+
+/* ═══════════════════════════════════════════════════════════════
+   CONSOLE ASSISTANT — connectée au webhook n8n (lib/n8n.ts).
+   Élément signature de la page : le "billet" à gauche se remplit en
+   direct à partir des données extraites par le workflow, comme un
+   vrai devis NeoTravel (cf. email + PDF de référence).
+═══════════════════════════════════════════════════════════════ */
+
+interface Msg {
+  id: number;
+  role: "user" | "assistant";
+  content: string;
+  isError?: boolean;
+}
+
+const EMPTY_TRIP: TripData = {
+  depart: null,
+  destination: null,
+  passagers: null,
+  vehicule: null,
+  distance: null,
+  prix: null,
+  pdfUrl: null,
+};
+
+const INIT_MSGS: Msg[] = [
+  {
+    id: 1,
+    role: "assistant",
+    content:
+      "Bonjour. Décrivez votre trajet de groupe — villes, date, nombre de personnes — et je prépare votre devis en direct.",
+  },
+];
+
+const SUGGESTIONS = [
+  "Groupe de 20 personnes, Casablanca → Marrakech, le 20 juillet, aller-retour",
+  "Sortie scolaire de 45 élèves, Lyon → Annecy, le 12 octobre",
+  "Séminaire d'entreprise, 60 personnes, Paris → Reims, journée",
+];
+
+function TicketRow({ label, value, mono }: { label: string; value: string | null; mono?: boolean }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "baseline",
+        padding: "9px 0",
+        borderBottom: `1px dashed ${T.paperLine}`,
+      }}
+    >
+      <span
+        style={{
+          fontFamily: T.fontMono,
+          fontSize: 10.5,
+          fontWeight: 500,
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+          color: "#6b6452",
+        }}
+      >
+        {label}
+      </span>
+      <span
+        style={{
+          fontFamily: mono ? T.fontMono : T.fontBody,
+          fontSize: 13.5,
+          fontWeight: 600,
+          color: value ? "#1c2017" : "#b9b194",
+          textAlign: "right",
+        }}
+      >
+        {value ?? "—"}
+      </span>
+    </div>
+  );
+}
+
+export default function AssistantConsole() {
+  const [msgs, setMsgs] = useState<Msg[]>(INIT_MSGS);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [trip, setTrip] = useState<TripData>(EMPTY_TRIP);
+  const [animIds, setAnimIds] = useState<number[]>([]);
+  const sessionRef = useRef<string>("");
+  const endRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    sessionRef.current = newSessionId();
+  }, []);
+
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [msgs, loading]);
+
+  const send = useCallback(
+    async (text: string) => {
+      if (loading || !text.trim()) return;
+      const uid = Date.now();
+      const history: ChatTurn[] = msgs.map((m) => ({ role: m.role, content: m.content }));
+      setMsgs((p) => [...p, { id: uid, role: "user", content: text }]);
+      setLoading(true);
+
+      try {
+        const result = await askAssistant(text, sessionRef.current, history);
+        const aid = Date.now() + 1;
+        setMsgs((p) => [...p, { id: aid, role: "assistant", content: result.reply }]);
+        setAnimIds((p) => [...p, aid]);
+        setTrip((prev) => mergeTrip(prev, result.trip));
+        setTimeout(() => setAnimIds((p) => p.filter((x) => x !== aid)), 600);
+      } catch {
+        const aid = Date.now() + 1;
+        setMsgs((p) => [
+          ...p,
+          {
+            id: aid,
+            role: "assistant",
+            content: "La connexion à l'assistant a échoué. Vérifiez votre réseau et réessayez dans un instant.",
+            isError: true,
+          },
+        ]);
+      } finally {
+        setLoading(false);
+        inputRef.current?.focus();
+      }
+    },
+    [loading, msgs],
+  );
+
+  const handleSend = () => {
+    const t = input.trim();
+    if (!t) return;
+    setInput("");
+    send(t);
+  };
+
+  return (
+    <section id="assistant" style={{ position: "relative" }}>
+      <div className="rt-hero" style={{ display: "flex", flexDirection: "column", gap: 24, alignItems: "stretch" }}>
+        {/* ── Billet de devis (gauche) — élément signature ───────────── */}
+        <div style={{ flex: "0 0 320px", display: "flex", flexDirection: "column" }}>
+          <div
+            style={{
+              position: "relative",
+              background: T.paper,
+              borderRadius: 18,
+              overflow: "hidden",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
+              animation: trip.prix ? "rt-glow 2.6s ease-in-out infinite" : "none",
+            }}
+          >
+            <div style={{ padding: "20px 22px 6px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <span
+                  style={{
+                    fontFamily: T.fontMono,
+                    fontSize: 10.5,
+                    fontWeight: 600,
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
+                    color: T.emeraldDp,
+                  }}
+                >
+                  Billet de devis
+                </span>
+                <span
+                  style={{
+                    width: 7,
+                    height: 7,
+                    borderRadius: "50%",
+                    background: trip.prix ? T.emerald : "#cdc6ae",
+                    animation: trip.prix ? "rt-blink 2.4s ease-in-out infinite" : "none",
+                  }}
+                />
+              </div>
+              <p
+                style={{
+                  fontFamily: T.fontDisplay,
+                  fontSize: 19,
+                  fontWeight: 700,
+                  letterSpacing: "-0.01em",
+                  color: trip.depart ? "#16201a" : "#b9b194",
+                  lineHeight: 1.25,
+                }}
+              >
+                {trip.depart && trip.destination ? `${trip.depart} → ${trip.destination}` : "En attente de votre message…"}
+              </p>
+            </div>
+
+            <div style={{ padding: "4px 22px" }}>
+              <TicketRow label="Départ" value={trip.depart} />
+              <TicketRow label="Destination" value={trip.destination} />
+              <TicketRow label="Passagers" value={trip.passagers ? `${trip.passagers} pers.` : null} />
+              <TicketRow label="Véhicule" value={trip.vehicule} />
+              <TicketRow label="Distance" value={trip.distance ? `${trip.distance} km` : null} mono />
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "13px 0" }}>
+                <span
+                  style={{
+                    fontFamily: T.fontMono,
+                    fontSize: 10.5,
+                    fontWeight: 600,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: T.emeraldDp,
+                  }}
+                >
+                  Prix estimé
+                </span>
+                <span
+                  style={{
+                    fontFamily: T.fontMono,
+                    fontSize: trip.prix ? 22 : 13.5,
+                    fontWeight: 700,
+                    color: trip.prix ? T.emeraldDp : "#b9b194",
+                  }}
+                >
+                  {trip.prix ? fmtEUR(trip.prix) : "—"}
+                </span>
+              </div>
+            </div>
+
+            <div style={{ height: 0, borderTop: `1.5px dashed ${T.paperLine}`, margin: "2px 0" }} />
+
+            <div style={{ padding: "14px 22px 20px" }}>
+              {trip.pdfUrl ? (
+                <a
+                  href={trip.pdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 8,
+                    background: T.emeraldDp,
+                    color: "#f3efe3",
+                    fontSize: 13,
+                    fontWeight: 700,
+                    padding: "12px 16px",
+                    borderRadius: 11,
+                    textDecoration: "none",
+                  }}
+                >
+                  <IcoDownload size={14} /> Télécharger le devis (PDF)
+                </a>
+              ) : (
+                <p style={{ fontSize: 11, color: "#a39c84", textAlign: "center", lineHeight: 1.6 }}>
+                  Le billet se complète automatiquement
+                  <br />à mesure de la conversation.
+                </p>
+              )}
+            </div>
+
+            <div style={{ display: "flex", gap: 2, padding: "0 22px 16px", opacity: 0.5 }}>
+              {Array.from({ length: 38 }).map((_, i) => (
+                <span key={i} style={{ width: i % 5 === 0 ? 2.4 : 1.2, height: 16, background: "#16201a" }} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── Console de discussion (droite) ──────────────────────────── */}
+        <div style={{ flex: "1 1 0", minWidth: 0 }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              height: "66vh",
+              minHeight: 460,
+              borderRadius: 20,
+              border: `1px solid ${T.line}`,
+              background: T.panel,
+              boxShadow: "0 20px 60px rgba(0,0,0,0.35)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 9,
+                padding: "14px 18px",
+                borderBottom: `1px solid ${T.line}`,
+                flexShrink: 0,
+              }}
+            >
+              <span
+                style={{
+                  width: 7,
+                  height: 7,
+                  borderRadius: "50%",
+                  background: T.emerald,
+                  animation: "rt-blink 2.5s ease-in-out infinite",
+                }}
+              />
+              <span style={{ fontSize: 13, fontWeight: 600, color: T.white }}>Assistant NeoTravel</span>
+              <span style={{ fontFamily: T.fontMono, fontSize: 11, color: T.ashDim }}>— en ligne</span>
+            </div>
+
+            <div style={{ flex: 1, overflowY: "auto", padding: 18, display: "flex", flexDirection: "column", gap: 10 }}>
+              {msgs.map((m) => (
+                <div
+                  key={m.id}
+                  style={{
+                    display: "flex",
+                    justifyContent: m.role === "user" ? "flex-end" : "flex-start",
+                    animation: animIds.includes(m.id) ? "rt-fade .35s ease" : "none",
+                  }}
+                >
+                  <div
+                    style={{
+                      maxWidth: "82%",
+                      fontSize: 14,
+                      lineHeight: 1.6,
+                      padding: "11px 15px",
+                      borderRadius: m.role === "user" ? "14px 4px 14px 14px" : "4px 14px 14px 14px",
+                      background:
+                        m.role === "user"
+                          ? `linear-gradient(135deg, ${T.emerald}, ${T.emeraldDp})`
+                          : m.isError
+                          ? "rgba(226,103,74,0.12)"
+                          : T.panelHi,
+                      color: m.role === "user" ? "#06140f" : m.isError ? "#f3b8a8" : T.white,
+                      border: m.role === "user" ? "none" : `1px solid ${T.line}`,
+                    }}
+                  >
+                    {m.content}
+                  </div>
+                </div>
+              ))}
+              {loading && (
+                <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                  <div
+                    style={{
+                      background: T.panelHi,
+                      border: `1px solid ${T.line}`,
+                      borderRadius: "4px 14px 14px 14px",
+                      padding: "12px 16px",
+                      display: "flex",
+                      gap: 5,
+                      alignItems: "center",
+                    }}
+                  >
+                    {[0, 1, 2].map((i) => (
+                      <span
+                        key={i}
+                        style={{
+                          width: 5,
+                          height: 5,
+                          borderRadius: "50%",
+                          background: T.ash,
+                          animation: `rt-blink 1.1s ease-in-out ${i * 0.16}s infinite`,
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div ref={endRef} />
+            </div>
+
+            {msgs.length < 3 && (
+              <div style={{ display: "flex", gap: 8, overflowX: "auto", padding: "0 16px 4px", flexShrink: 0 }}>
+                {SUGGESTIONS.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => send(s)}
+                    disabled={loading}
+                    style={{
+                      flexShrink: 0,
+                      fontSize: 11.5,
+                      color: T.ash,
+                      background: T.panelHi,
+                      border: `1px solid ${T.line}`,
+                      borderRadius: 20,
+                      padding: "7px 13px",
+                      whiteSpace: "nowrap",
+                      opacity: loading ? 0.5 : 1,
+                    }}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <div style={{ padding: "10px 14px 14px", flexShrink: 0 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  background: T.ink2,
+                  borderRadius: 13,
+                  padding: "10px 14px",
+                  border: `1px solid ${T.line}`,
+                }}
+              >
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSend();
+                    }
+                  }}
+                  placeholder="Décrivez votre trajet de groupe…"
+                  disabled={loading}
+                  style={{ flex: 1, background: "transparent", border: "none", fontSize: 14, color: T.white, opacity: loading ? 0.5 : 1 }}
+                />
+                <button
+                  onClick={handleSend}
+                  disabled={loading || !input.trim()}
+                  style={{
+                    width: 34,
+                    height: 34,
+                    borderRadius: 10,
+                    flexShrink: 0,
+                    background: loading || !input.trim() ? T.panelHi2 : `linear-gradient(135deg, ${T.emeraldBr}, ${T.emerald})`,
+                    border: "none",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: loading || !input.trim() ? T.ashDim : T.emeraldInk,
+                  }}
+                >
+                  <IcoSend size={14} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
