@@ -1,0 +1,323 @@
+{
+  "name": "NeoTravel - Agent IA Commercial FINAL_Orchestrateur",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "76837bce-7c52-4e2f-badb-e0906c4bc5d3",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c7404404-6693-4063-8aca-7a53e2ab5d38",
+      "name": "Webhook",
+      "webhookId": "76837bce-7c52-4e2f-badb-e0906c4bc5d3"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.message || $json.message }}",
+        "options": {
+          "systemMessage": "Tu es l'agent commercial intelligent de NeoTravel.\n\nTu qualifies les demandes clients de transport et tu orchestres les actions grâce à tes tools.\n\nTu dois collecter uniquement les informations client suivantes :\n- nom\n- email\n- téléphone\n- destination\n- dateDepart au format YYYY-MM-DD\n- nombrePassagers\n- distanceKm\n- typeTrajet\n\ntypeTrajet doit toujours être normalisé ainsi :\n- si le client dit \"aller-retour\", \"aller retour\", \"A/R\", \"retour inclus\", alors typeTrajet = \"aller_retour\"\n- si le client dit \"aller simple\", \"simple trajet\", ou ne mentionne pas de retour, alors typeTrajet = \"aller_simple\"\n\ninterventionHumaine n'est pas une information à demander au client.\ninterventionHumaine doit toujours être défini automatiquement :\n- true uniquement si le client demande explicitement un conseiller, un commercial, un humain ou un rappel\n- false dans tous les autres cas\n\nNe demande jamais au client s'il souhaite une intervention humaine.\n\nTu disposes d'une mémoire conversationnelle. Utilise les messages précédents de la même session pour compléter les informations déjà données par le client.\n\nRègles importantes :\n- Tu ne calcules jamais le prix.\n- Tu ne donnes jamais de montant inventé.\n- Le calcul du devis est effectué uniquement par le tool traiter_demande_complete.\n- Si des informations obligatoires manquent, tu n'appelles aucun tool.\n- Si l'email est absent ou invalide, tu n'appelles aucun tool.\n- Si toutes les informations sont présentes, tu dois appeler le tool traiter_demande_complete avec les données structurées.\n\nSi des informations manquent, réponds uniquement en JSON valide :\n{\n  \"success\": false,\n  \"needsMoreInfo\": true,\n  \"message\": \"Merci de préciser ...\",\n  \"informationsManquantes\": []\n}\n\nSi le tool traiter_demande_complete est appelé avec succès, retourne uniquement le JSON final renvoyé par le tool, sans texte autour.\n\nSi toutes les informations obligatoires sont présentes, appelle le tool traiter_demande_complete.\n\nLes informations obligatoires sont :\n- nom\n- email valide\n- téléphone\n- destination\n- dateDepart\n- nombrePassagers\n- distanceKm\n- typeTrajet\n\ninterventionHumaine n'est jamais une information manquante.\nSi le client ne demande pas explicitement un humain, mets interventionHumaine à false."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "86bc5eda-9e0c-4c72-ba13-602885bb4f61",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatVercelAiGateway",
+      "typeVersion": 1,
+      "position": [
+        208,
+        272
+      ],
+      "id": "e58e1ae4-b686-4906-8e51-b8e63b1fe605",
+      "name": "Vercel AI Gateway Chat Model",
+      "credentials": {
+        "vercelAiGatewayApi": {
+          "id": "W9LSkwyN1CycoV2h",
+          "name": "Vercel AI Gateway - Neotravel"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook').first().json.body.sessionId || $('Webhook').first().json.body.email || \"demo-session-neotravel\" }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        304,
+        480
+      ],
+      "id": "dff32106-220d-4c68-93a5-56e01eac9936",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "Utilise cet outil uniquement lorsque toutes les informations nécessaires au devis sont disponibles : nom, email, téléphone, destination, dateDepart, nombrePassagers, distanceKm et typeTrajet.\n\nCet outil enregistre la demande dans Airtable, calcule le devis avec un moteur déterministe, crée le devis, génère le PDF, envoie l'email client, crée une relance et notifie un commercial si interventionHumaine vaut true.\n\nL'agent IA ne doit jamais calculer le prix lui-même. Le prix est calculé uniquement par cet outil.",
+        "workflowId": {
+          "__rl": true,
+          "value": "9JymI2QLSCsAgsqX",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/9JymI2QLSCsAgsqX",
+          "cachedResultName": "Tool - Traiter demande NeoTravel"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "interventionHumaine": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('interventionHumaine', `Booléen interne. Mettre true uniquement si le client demande explicitement un conseiller humain, un commercial, un rappel ou une reprise humaine. Sinon mettre false. Ne jamais demander cette information au client.`, 'boolean') }}",
+            "nombrePassagers": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('nombrePassagers', `Nombre total de passagers.`, 'number') }}",
+            "distanceKm": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('distanceKm', `Distance estimée du trajet en kilomètres.`, 'number') }}",
+            "nom": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('nom', `Nom complet du client Obligatoire`, 'string') }}",
+            "email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('email', `Adresse email valide du client. Obligatoire pour envoyer le devis.`, 'string') }}",
+            "telephone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('telephone', `Numéro de téléphone du client. Obligatoire.`, 'string') }}",
+            "destination": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('destination', `Destination du trajet demandée par le client`, 'string') }}",
+            "dateDepart": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('dateDepart', `Date de départ au format YYYY-MM-DD.`, 'string') }}",
+            "typeTrajet": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('typeTrajet', `Type de trajet normalisé. Valeurs autorisées uniquement : aller_simple ou aller_retour. Si le client dit aller-retour, aller retour, A/R ou retour inclus, utiliser aller_retour. Si le client dit aller simple ou ne mentionne pas de retour, utiliser aller_simple.`, 'string') }}",
+            "resume": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('resume', `Résumé court de la demande client.`, 'string') }}",
+            "categorie": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('categorie', `Catégorie commerciale de la demande, généralement Transfert.`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "nom",
+              "displayName": "nom",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "telephone",
+              "displayName": "telephone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "destination",
+              "displayName": "destination",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "dateDepart",
+              "displayName": "dateDepart",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "nombrePassagers",
+              "displayName": "nombrePassagers",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number"
+            },
+            {
+              "id": "distanceKm",
+              "displayName": "distanceKm",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number"
+            },
+            {
+              "id": "typeTrajet",
+              "displayName": "typeTrajet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "interventionHumaine",
+              "displayName": "interventionHumaine",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "boolean"
+            },
+            {
+              "id": "resume",
+              "displayName": "resume",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "categorie",
+              "displayName": "categorie",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        288
+      ],
+      "id": "aeaf70a6-4b19-4a95-ab89-e7c33bb623e0",
+      "name": "traiter_demande_complete"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw =\n  $json.output ||\n  $json.text ||\n  $json.response ||\n  $json.message ||\n  JSON.stringify($json);\n\nlet content = typeof raw === \"string\" ? raw : JSON.stringify(raw);\n\nconst match = content.match(/\\{[\\s\\S]*\\}/);\nif (match) {\n  content = match[0];\n}\n\nlet data;\n\ntry {\n  data = JSON.parse(content);\n} catch (error) {\n  data = {\n    success: false,\n    needsMoreInfo: true,\n    message: \"Je n'ai pas réussi à traiter correctement votre demande. Pouvez-vous reformuler ?\",\n    raw\n  };\n}\n\nreturn [{ json: data }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        0
+      ],
+      "id": "bc58c1a1-4626-4b06-b24e-b712d71a40ee",
+      "name": "Parser_Reponse_Tools"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        768,
+        0
+      ],
+      "id": "adeeca03-f8bf-425f-8114-e0c65aa0dbab",
+      "name": "Reponse_Frontend_Tools"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Parser_Reponse_Tools",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vercel AI Gateway Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "traiter_demande_complete": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser_Reponse_Tools": {
+      "main": [
+        [
+          {
+            "node": "Reponse_Frontend_Tools",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "cc9e8d4b-582f-474b-bec8-28a5e9f21199",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "131e4850f9c6161a10355b3de943780e16f0be9a52d2fad35491bd29144cc937"
+  },
+  "nodeGroups": [],
+  "id": "7JUaNc86AsISL7qT",
+  "tags": []
+}
