@@ -7,9 +7,8 @@ import type { ChatTurn, TripData } from "../../lib/n8n";
 
 /* ═══════════════════════════════════════════════════════════════
    CONSOLE ASSISTANT — connectée au webhook n8n (lib/n8n.ts).
-   Élément signature de la page : le "billet" à gauche se remplit en
-   direct à partir des données extraites par le workflow, comme un
-   vrai devis NeoTravel (cf. email + PDF de référence).
+   La carte récapitulative à gauche se remplit en direct à partir des
+   données extraites par le workflow, comme un vrai devis NeoTravel.
 ═══════════════════════════════════════════════════════════════ */
 
 interface Msg {
@@ -38,41 +37,33 @@ const INIT_MSGS: Msg[] = [
   },
 ];
 
-const SUGGESTIONS = [
-  "Groupe de 20 personnes, Casablanca → Marrakech, le 20 juillet, aller-retour",
-  "Sortie scolaire de 45 élèves, Lyon → Annecy, le 12 octobre",
-  "Séminaire d'entreprise, 60 personnes, Paris → Reims, journée",
-];
-
-function TicketRow({ label, value, mono }: { label: string; value: string | null; mono?: boolean }) {
+function SummaryRow({ label, value }: { label: string; value: string | null }) {
   return (
     <div
       style={{
         display: "flex",
         justifyContent: "space-between",
         alignItems: "baseline",
-        padding: "9px 0",
-        borderBottom: `1px dashed ${T.paperLine}`,
+        padding: "10px 0",
+        borderBottom: `1px solid ${T.line}`,
       }}
     >
       <span
         style={{
-          fontFamily: T.fontMono,
-          fontSize: 10.5,
+          fontFamily: T.fontBody,
+          fontSize: 12.5,
           fontWeight: 500,
-          letterSpacing: "0.1em",
-          textTransform: "uppercase",
-          color: "#6b6452",
+          color: T.ash,
         }}
       >
         {label}
       </span>
       <span
         style={{
-          fontFamily: mono ? T.fontMono : T.fontBody,
+          fontFamily: T.fontBody,
           fontSize: 13.5,
           fontWeight: 600,
-          color: value ? "#1c2017" : "#b9b194",
+          color: value ? T.white : T.ashDim,
           textAlign: "right",
         }}
       >
@@ -144,38 +135,38 @@ export default function AssistantConsole() {
   return (
     <section id="assistant" style={{ position: "relative" }}>
       <div className="rt-hero" style={{ display: "flex", flexDirection: "column", gap: 24, alignItems: "stretch" }}>
-        {/* ── Billet de devis (gauche) — élément signature ───────────── */}
+        {/* ── Carte récapitulative (gauche) ───────────────────────────── */}
         <div style={{ flex: "0 0 320px", display: "flex", flexDirection: "column" }}>
           <div
             style={{
               position: "relative",
-              background: T.paper,
+              background: T.panel,
+              border: `1px solid ${T.line}`,
               borderRadius: 18,
               overflow: "hidden",
-              boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
-              animation: trip.prix ? "rt-glow 2.6s ease-in-out infinite" : "none",
+              boxShadow: "0 8px 28px rgba(28,37,33,0.08)",
             }}
           >
             <div style={{ padding: "20px 22px 6px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                 <span
                   style={{
-                    fontFamily: T.fontMono,
-                    fontSize: 10.5,
-                    fontWeight: 600,
-                    letterSpacing: "0.14em",
+                    fontFamily: T.fontBody,
+                    fontSize: 11,
+                    fontWeight: 700,
+                    letterSpacing: "0.1em",
                     textTransform: "uppercase",
-                    color: T.emeraldDp,
+                    color: T.emerald,
                   }}
                 >
-                  Billet de devis
+                  Récapitulatif
                 </span>
                 <span
                   style={{
                     width: 7,
                     height: 7,
                     borderRadius: "50%",
-                    background: trip.prix ? T.emerald : "#cdc6ae",
+                    background: trip.prix ? T.emerald : T.lineStrong,
                     animation: trip.prix ? "rt-blink 2.4s ease-in-out infinite" : "none",
                   }}
                 />
@@ -186,7 +177,7 @@ export default function AssistantConsole() {
                   fontSize: 19,
                   fontWeight: 700,
                   letterSpacing: "-0.01em",
-                  color: trip.depart ? "#16201a" : "#b9b194",
+                  color: trip.depart ? T.white : T.ashDim,
                   lineHeight: 1.25,
                 }}
               >
@@ -195,30 +186,28 @@ export default function AssistantConsole() {
             </div>
 
             <div style={{ padding: "4px 22px" }}>
-              <TicketRow label="Départ" value={trip.depart} />
-              <TicketRow label="Destination" value={trip.destination} />
-              <TicketRow label="Passagers" value={trip.passagers ? `${trip.passagers} pers.` : null} />
-              <TicketRow label="Véhicule" value={trip.vehicule} />
-              <TicketRow label="Distance" value={trip.distance ? `${trip.distance} km` : null} mono />
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "13px 0" }}>
+              <SummaryRow label="Départ" value={trip.depart} />
+              <SummaryRow label="Destination" value={trip.destination} />
+              <SummaryRow label="Passagers" value={trip.passagers ? `${trip.passagers} pers.` : null} />
+              <SummaryRow label="Véhicule" value={trip.vehicule} />
+              <SummaryRow label="Distance" value={trip.distance ? `${trip.distance} km` : null} />
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "14px 0" }}>
                 <span
                   style={{
-                    fontFamily: T.fontMono,
-                    fontSize: 10.5,
-                    fontWeight: 600,
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                    color: T.emeraldDp,
+                    fontFamily: T.fontBody,
+                    fontSize: 12.5,
+                    fontWeight: 500,
+                    color: T.ash,
                   }}
                 >
                   Prix estimé
                 </span>
                 <span
                   style={{
-                    fontFamily: T.fontMono,
+                    fontFamily: T.fontDisplay,
                     fontSize: trip.prix ? 22 : 13.5,
-                    fontWeight: 700,
-                    color: trip.prix ? T.emeraldDp : "#b9b194",
+                    fontWeight: 800,
+                    color: trip.prix ? T.emeraldDp : T.ashDim,
                   }}
                 >
                   {trip.prix ? fmtEUR(trip.prix) : "—"}
@@ -226,9 +215,7 @@ export default function AssistantConsole() {
               </div>
             </div>
 
-            <div style={{ height: 0, borderTop: `1.5px dashed ${T.paperLine}`, margin: "2px 0" }} />
-
-            <div style={{ padding: "14px 22px 20px" }}>
+            <div style={{ padding: "14px 22px 22px" }}>
               {trip.pdfUrl ? (
                 <a
                   href={trip.pdfUrl}
@@ -239,8 +226,8 @@ export default function AssistantConsole() {
                     alignItems: "center",
                     justifyContent: "center",
                     gap: 8,
-                    background: T.emeraldDp,
-                    color: "#f3efe3",
+                    background: T.emerald,
+                    color: T.emeraldInk,
                     fontSize: 13,
                     fontWeight: 700,
                     padding: "12px 16px",
@@ -251,17 +238,11 @@ export default function AssistantConsole() {
                   <IcoDownload size={14} /> Télécharger le devis (PDF)
                 </a>
               ) : (
-                <p style={{ fontSize: 11, color: "#a39c84", textAlign: "center", lineHeight: 1.6 }}>
-                  Le billet se complète automatiquement
+                <p style={{ fontSize: 11.5, color: T.ashDim, textAlign: "center", lineHeight: 1.6 }}>
+                  Le récapitulatif se complète automatiquement
                   <br />à mesure de la conversation.
                 </p>
               )}
-            </div>
-
-            <div style={{ display: "flex", gap: 2, padding: "0 22px 16px", opacity: 0.5 }}>
-              {Array.from({ length: 38 }).map((_, i) => (
-                <span key={i} style={{ width: i % 5 === 0 ? 2.4 : 1.2, height: 16, background: "#16201a" }} />
-              ))}
             </div>
           </div>
         </div>
@@ -277,7 +258,7 @@ export default function AssistantConsole() {
               borderRadius: 20,
               border: `1px solid ${T.line}`,
               background: T.panel,
-              boxShadow: "0 20px 60px rgba(0,0,0,0.35)",
+              boxShadow: "0 8px 28px rgba(28,37,33,0.08)",
             }}
           >
             <div
@@ -300,7 +281,7 @@ export default function AssistantConsole() {
                 }}
               />
               <span style={{ fontSize: 13, fontWeight: 600, color: T.white }}>Assistant NeoTravel</span>
-              <span style={{ fontFamily: T.fontMono, fontSize: 11, color: T.ashDim }}>— en ligne</span>
+              <span style={{ fontFamily: T.fontBody, fontSize: 12, color: T.ashDim }}>— en ligne</span>
             </div>
 
             <div style={{ flex: 1, overflowY: "auto", padding: 18, display: "flex", flexDirection: "column", gap: 10 }}>
@@ -322,11 +303,11 @@ export default function AssistantConsole() {
                       borderRadius: m.role === "user" ? "14px 4px 14px 14px" : "4px 14px 14px 14px",
                       background:
                         m.role === "user"
-                          ? `linear-gradient(135deg, ${T.emerald}, ${T.emeraldDp})`
+                          ? T.emerald
                           : m.isError
-                          ? "rgba(226,103,74,0.12)"
+                          ? "#fdece8"
                           : T.panelHi,
-                      color: m.role === "user" ? "#06140f" : m.isError ? "#f3b8a8" : T.white,
+                      color: m.role === "user" ? T.emeraldInk : m.isError ? T.danger : T.white,
                       border: m.role === "user" ? "none" : `1px solid ${T.line}`,
                     }}
                   >
@@ -365,31 +346,6 @@ export default function AssistantConsole() {
               <div ref={endRef} />
             </div>
 
-            {msgs.length < 3 && (
-              <div style={{ display: "flex", gap: 8, overflowX: "auto", padding: "0 16px 4px", flexShrink: 0 }}>
-                {SUGGESTIONS.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => send(s)}
-                    disabled={loading}
-                    style={{
-                      flexShrink: 0,
-                      fontSize: 11.5,
-                      color: T.ash,
-                      background: T.panelHi,
-                      border: `1px solid ${T.line}`,
-                      borderRadius: 20,
-                      padding: "7px 13px",
-                      whiteSpace: "nowrap",
-                      opacity: loading ? 0.5 : 1,
-                    }}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-            )}
-
             <div style={{ padding: "10px 14px 14px", flexShrink: 0 }}>
               <div
                 style={{
@@ -425,7 +381,7 @@ export default function AssistantConsole() {
                     height: 34,
                     borderRadius: 10,
                     flexShrink: 0,
-                    background: loading || !input.trim() ? T.panelHi2 : `linear-gradient(135deg, ${T.emeraldBr}, ${T.emerald})`,
+                    background: loading || !input.trim() ? T.panelHi2 : T.emerald,
                     border: "none",
                     display: "flex",
                     alignItems: "center",

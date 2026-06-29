@@ -22,7 +22,8 @@ export default function Faq({ items }: { items: FaqItem[] }) {
               border: `1px solid ${isOpen ? T.lineStrong : T.line}`,
               borderRadius: 14,
               overflow: "hidden",
-              transition: "border-color .2s",
+              boxShadow: isOpen ? "0 4px 14px rgba(28,37,33,0.06)" : "none",
+              transition: "border-color .2s, box-shadow .2s",
             }}
           >
             <button
@@ -46,7 +47,7 @@ export default function Faq({ items }: { items: FaqItem[] }) {
               <span
                 style={{
                   flexShrink: 0,
-                  color: T.emeraldBr,
+                  color: T.emerald,
                   transition: "transform .25s",
                   transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
                 }}

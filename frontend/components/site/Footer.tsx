@@ -27,24 +27,23 @@ export default function Footer() {
                   width: 30,
                   height: 30,
                   borderRadius: 8,
-                  background: T.panelHi,
-                  border: `1px solid ${T.lineStrong}`,
+                  background: T.emerald,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: T.emeraldBr,
+                  color: T.emeraldInk,
                 }}
               >
                 <IcoBus size={16} />
               </div>
-              <span style={{ fontFamily: T.fontDisplay, fontSize: 16, fontWeight: 700, color: T.white }}>
+              <span style={{ fontFamily: T.fontDisplay, fontSize: 16, fontWeight: 800, color: T.white }}>
                 NeoTravel
               </span>
             </div>
             <p style={{ fontSize: 13, lineHeight: 1.7, maxWidth: 230, color: T.ash }}>
               La plateforme qui digitalise la location d&rsquo;autocars de groupe sans perdre l&rsquo;humain.
             </p>
-            <p style={{ fontFamily: T.fontMono, fontSize: 11.5, color: T.ashDim }}>
+            <p style={{ fontFamily: T.fontBody, fontSize: 12, fontStyle: "italic", color: T.ashDim }}>
               « Digitaliser sans déshumaniser »
             </p>
           </div>
@@ -57,10 +56,10 @@ export default function Footer() {
             <div>
               <p
                 style={{
-                  fontFamily: T.fontMono,
+                  fontFamily: T.fontBody,
                   fontSize: 11,
-                  fontWeight: 500,
-                  letterSpacing: "0.12em",
+                  fontWeight: 700,
+                  letterSpacing: "0.1em",
                   textTransform: "uppercase",
                   color: T.ashDim,
                   marginBottom: 14,
@@ -89,10 +88,10 @@ export default function Footer() {
             <div>
               <p
                 style={{
-                  fontFamily: T.fontMono,
+                  fontFamily: T.fontBody,
                   fontSize: 11,
-                  fontWeight: 500,
-                  letterSpacing: "0.12em",
+                  fontWeight: 700,
+                  letterSpacing: "0.1em",
                   textTransform: "uppercase",
                   color: T.ashDim,
                   marginBottom: 14,
@@ -135,7 +134,7 @@ export default function Footer() {
             gap: 12,
           }}
         >
-          <span style={{ fontFamily: T.fontMono, fontSize: 11.5, color: T.ashDim }}>
+          <span style={{ fontFamily: T.fontBody, fontSize: 12, color: T.ashDim }}>
             © 2026 NeoTravel — Tous droits réservés
           </span>
           <div style={{ display: "flex", gap: 24 }}>

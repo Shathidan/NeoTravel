@@ -22,6 +22,7 @@ export default function SegmentTeaserCard({
         display: "flex",
         flexDirection: "column",
         gap: 14,
+        boxShadow: "0 1px 3px rgba(28,37,33,0.05)",
       }}
     >
       <div
@@ -34,14 +35,14 @@ export default function SegmentTeaserCard({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: T.emeraldBr,
+          color: T.emerald,
         }}
       >
         {icon}
       </div>
       <p style={{ fontFamily: T.fontDisplay, fontSize: 16.5, fontWeight: 700, color: T.white }}>{title}</p>
       <p style={{ fontSize: 13, color: T.ash, lineHeight: 1.65, flex: 1 }}>{blurb}</p>
-      <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, fontWeight: 600, color: T.emeraldBr }}>
+      <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, fontWeight: 600, color: T.emerald }}>
         Voir la solution dédiée <IcoArrowRight size={12} />
       </span>
     </div>

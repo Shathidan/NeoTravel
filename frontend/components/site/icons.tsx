@@ -127,7 +127,7 @@ export const IcoStar = (p?: Props) => (
     width={p?.size ?? 13}
     height={p?.size ?? 13}
     viewBox="0 0 24 24"
-    fill={p?.color ?? "#e8b768"}
+    fill={p?.color ?? "#e08a4b"}
     stroke="none"
   >
     <polygon points="12 1.5 15.5 8.5 23 9.6 17.5 15 18.8 22.5 12 19 5.2 22.5 6.5 15 1 9.6 8.5 8.5 12 1.5" />

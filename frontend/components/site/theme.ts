@@ -3,60 +3,53 @@ import type { CSSProperties } from "react";
 /* ═══════════════════════════════════════════════════════════════════════
    NEOTRAVEL — DESIGN SYSTEM
    ---------------------------------------------------------------------
-   Direction : "Manifeste de transport" — l'identité visuelle s'inspire
-   du véritable billet/devis que NeoTravel génère (cf. devis email + PDF) :
-   un fond profond couleur forêt, une carte-billet couleur papier avec
-   bordure perforée, des champs en monospace comme un tableau de départs,
-   et l'émeraude de marque comme unique accent chromatique fort.
+   Direction : "Transporteur professionnel" — identité sobre et rassurante,
+   pensée pour une société de transport (et non un produit tech) : fond
+   clair, vert de marque utilisé avec parcimonie, terracotta en accent
+   d'appel à l'action, typographie Manrope/Inter, ombres légères.
    ---------------------------------------------------------------------
-   Palette nommée (6 rôles) :
-   - ink      : fond de page (forêt noircie, pas un noir neutre)
-   - panel    : surface des cartes sombres
-   - paper    : couleur "billet papier" — réservée au composant signature
-   - emerald  : accent de marque (texte de marque, CTA, statut "en ligne")
-   - amber    : second accent, réservé aux tampons / alertes ponctuelles
-   - ash      : texte atténué sur fond sombre
+   Palette nommée :
+   - ink/ink2     : fonds de page (blanc / gris très clair et chaud)
+   - panel/panelHi: surfaces des cartes et éléments en relief
+   - white        : texte principal (quasi-noir, légèrement vert)
+   - ash/ashDim   : texte secondaire / tertiaire
+   - emerald*     : vert de marque (boutons, liens, statut "en ligne")
+   - amber*       : accent chaud terracotta, réservé aux CTA
 ═══════════════════════════════════════════════════════════════════════ */
 
 export const T = {
   // Fonds
-  ink:        "#0a120e",
-  ink2:       "#0d1813",
-  panel:      "#121e18",
-  panelHi:    "#16261f",
-  panelHi2:   "#1c2f26",
+  ink:        "#ffffff",
+  ink2:       "#f7f8f6",
+  panel:      "#ffffff",
+  panelHi:    "#f7f8f6",
+  panelHi2:   "#eef0ec",
 
   // Lignes / bordures
-  line:       "rgba(244,241,232,0.09)",
-  lineSoft:   "rgba(244,241,232,0.05)",
-  lineStrong: "rgba(244,241,232,0.16)",
-
-  // Billet papier (composant signature)
-  paper:      "#f3efe3",
-  paperDim:   "#e3ddc9",
-  paperLine:  "rgba(15,28,22,0.12)",
+  line:       "#e7e9e4",
+  lineSoft:   "rgba(28,37,33,0.045)",
+  lineStrong: "#d6d9d2",
 
   // Texte
-  white:      "#f6f7f4",
-  ash:        "#93a59c",
-  ashDim:     "#5f7268",
+  white:      "#1c2521",
+  ash:        "#6b7570",
+  ashDim:     "#9aa39d",
 
-  // Accent de marque
-  emerald:    "#1f9d78",
-  emeraldBr:  "#3fcf9c",
-  emeraldDp:  "#0e5c44",
-  emeraldInk: "#06140f",
+  // Accent de marque (vert NeoTravel)
+  emerald:    "#0f6e5c",
+  emeraldBr:  "#15876f",
+  emeraldDp:  "#0b5346",
+  emeraldInk: "#ffffff",
 
-  // Second accent — tampon / tag
-  amber:      "#e8b768",
-  amberDp:    "#a9803f",
+  // Accent chaud — CTA uniquement
+  amber:      "#e08a4b",
+  amberDp:    "#b96b34",
 
-  danger:     "#e2674a",
+  danger:     "#c0432a",
 
   // Typographie
-  fontDisplay: "'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif",
+  fontDisplay: "'Manrope', 'Inter', system-ui, -apple-system, sans-serif",
   fontBody:    "'Inter', system-ui, -apple-system, sans-serif",
-  fontMono:    "'IBM Plex Mono', 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace",
 
   radiusSm: 10,
   radiusMd: 16,
@@ -67,16 +60,17 @@ export const card = (extra?: CSSProperties): CSSProperties => ({
   background: T.panel,
   border: `1px solid ${T.line}`,
   borderRadius: T.radiusMd,
+  boxShadow: "0 1px 3px rgba(28,37,33,0.05)",
   ...extra,
 });
 
 export const eyebrow = (extra?: CSSProperties): CSSProperties => ({
-  fontFamily: T.fontMono,
+  fontFamily: T.fontBody,
   fontSize: 11,
-  fontWeight: 500,
-  letterSpacing: "0.16em",
+  fontWeight: 700,
+  letterSpacing: "0.14em",
   textTransform: "uppercase" as const,
-  color: T.emeraldBr,
+  color: T.emerald,
   ...extra,
 });
 

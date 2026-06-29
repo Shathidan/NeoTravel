@@ -17,12 +17,12 @@ export default function SectionHeading({
       <span
         style={{
           display: "block",
-          fontFamily: T.fontMono,
+          fontFamily: T.fontBody,
           fontSize: 11,
-          fontWeight: 500,
-          letterSpacing: "0.16em",
+          fontWeight: 700,
+          letterSpacing: "0.14em",
           textTransform: "uppercase",
-          color: T.emeraldBr,
+          color: T.emerald,
           marginBottom: 14,
         }}
       >
@@ -32,7 +32,7 @@ export default function SectionHeading({
         style={{
           fontFamily: T.fontDisplay,
           fontSize: "clamp(24px,3.4vw,40px)",
-          fontWeight: 700,
+          fontWeight: 800,
           letterSpacing: "-0.02em",
           color: T.white,
           lineHeight: 1.15,

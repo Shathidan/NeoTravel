@@ -8,6 +8,7 @@ import AssistantConsole from "../components/site/AssistantConsole";
 import RouteDivider from "../components/site/RouteDivider";
 import TicketStub from "../components/site/TicketStub";
 import StepCard from "../components/site/StepCard";
+import PhotoCarousel from "../components/site/PhotoCarousel";
 import VehicleCard from "../components/site/VehicleCard";
 import SegmentTeaserCard from "../components/site/SegmentTeaserCard";
 import TestiCard from "../components/site/TestiCard";
@@ -31,7 +32,7 @@ export default function HomePage() {
               style={{
                 position: "absolute",
                 inset: 0,
-                background: `radial-gradient(ellipse 80% 50% at 50% -10%, rgba(31,157,120,0.16), transparent 60%)`,
+                background: `radial-gradient(ellipse 80% 50% at 50% -10%, rgba(15,110,92,0.08), transparent 60%)`,
                 zIndex: 0,
               }}
             />
@@ -57,11 +58,12 @@ export default function HomePage() {
                     borderRadius: 24,
                     background: T.panel,
                     border: `1px solid ${T.line}`,
+                    boxShadow: "0 1px 3px rgba(28,37,33,0.05)",
                   }}
                 >
                   <span style={{ width: 6, height: 6, borderRadius: "50%", background: T.emerald, animation: "rt-blink 2s ease-in-out infinite" }} />
-                  <span style={{ fontFamily: T.fontMono, fontSize: 11.5, fontWeight: 500, letterSpacing: "0.06em", color: T.ash }}>
-                    DEVIS EN DIRECT · ASSISTANT CONNECTÉ
+                  <span style={{ fontFamily: T.fontBody, fontSize: 12, fontWeight: 600, letterSpacing: "0.04em", color: T.ash }}>
+                    Devis en direct · Assistant connecté
                   </span>
                 </div>
               </div>
@@ -71,7 +73,7 @@ export default function HomePage() {
                   style={{
                     fontFamily: T.fontDisplay,
                     fontSize: "clamp(32px,5.2vw,58px)",
-                    fontWeight: 700,
+                    fontWeight: 800,
                     letterSpacing: "-0.02em",
                     lineHeight: 1.08,
                     color: T.white,
@@ -81,7 +83,7 @@ export default function HomePage() {
                   Votre transport de groupe,
                   <br />
                   décrit en une phrase
-                  <span style={{ color: T.emeraldBr }}>, chiffré en une minute.</span>
+                  <span style={{ color: T.emerald }}>, chiffré en une minute.</span>
                 </h1>
                 <p style={{ fontSize: 16.5, color: T.ash, maxWidth: 540, margin: "0 auto", lineHeight: 1.7 }}>
                   Parlez librement à l&rsquo;assistant. Il identifie votre trajet, votre effectif et le véhicule adapté,
@@ -136,6 +138,16 @@ export default function HomePage() {
             </div>
           </section>
 
+          {/* ━━━━ CARROUSEL PHOTO ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+          <section style={{ maxWidth: 1200, margin: "88px auto 0", padding: "0 24px" }}>
+            <SectionHeading
+              eyebrow="En images"
+              title="Vos voyages de groupe, en images"
+              sub="Autocars, groupes en route, paysages traversés — un aperçu de chaque trajet organisé par NeoTravel."
+            />
+            <PhotoCarousel />
+          </section>
+
           {/* ━━━━ FLOTTE (teaser) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
           <section style={{ maxWidth: 1200, margin: "88px auto 0", padding: "0 24px" }}>
             <SectionHeading
@@ -151,7 +163,7 @@ export default function HomePage() {
             <div style={{ textAlign: "center" }}>
               <Link
                 href="/flotte"
-                style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13.5, fontWeight: 600, color: T.emeraldBr, textDecoration: "none" }}
+                style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13.5, fontWeight: 600, color: T.emerald, textDecoration: "none" }}
               >
                 Voir toute la flotte <IcoArrowRight size={13} />
               </Link>
@@ -175,7 +187,7 @@ export default function HomePage() {
             <div style={{ textAlign: "center" }}>
               <Link
                 href="/entreprises"
-                style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13.5, fontWeight: 600, color: T.emeraldBr, textDecoration: "none" }}
+                style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13.5, fontWeight: 600, color: T.emerald, textDecoration: "none" }}
               >
                 Explorer toutes les solutions <IcoArrowRight size={13} />
               </Link>
@@ -198,14 +210,13 @@ export default function HomePage() {
             <Faq items={FAQ_ITEMS} />
           </section>
 
-          {/* ━━━━ CTA — TAMPON ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+          {/* ━━━━ CTA ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
           <section style={{ maxWidth: 1200, margin: "96px auto 0", padding: "0 24px" }}>
             <div
               style={{
                 position: "relative",
                 borderRadius: 26,
-                background: T.panel,
-                border: `1px solid ${T.line}`,
+                background: T.emeraldDp,
                 padding: "56px 40px",
                 textAlign: "center",
                 overflow: "hidden",
@@ -215,43 +226,19 @@ export default function HomePage() {
                 style={{
                   position: "absolute",
                   inset: 0,
-                  background: `radial-gradient(circle at 50% 0%, rgba(63,207,156,0.14), transparent 65%)`,
+                  background: `radial-gradient(circle at 50% 0%, rgba(255,255,255,0.08), transparent 65%)`,
                 }}
               />
-              <div
-                aria-hidden="true"
-                style={{
-                  position: "absolute",
-                  top: 24,
-                  right: 36,
-                  width: 92,
-                  height: 92,
-                  borderRadius: "50%",
-                  border: `2px solid ${T.emeraldBr}`,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  transform: "rotate(-14deg)",
-                  opacity: 0.35,
-                }}
-                className="rt-stamp"
-              >
-                <span style={{ fontFamily: T.fontMono, fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: T.emeraldBr, textAlign: "center" }}>
-                  PRÊT AU
-                  <br />
-                  DÉPART
-                </span>
-              </div>
 
               <div style={{ position: "relative", zIndex: 1 }}>
                 <p
                   style={{
-                    fontFamily: T.fontMono,
-                    fontSize: 11.5,
-                    fontWeight: 500,
-                    letterSpacing: "0.14em",
+                    fontFamily: T.fontBody,
+                    fontSize: 12,
+                    fontWeight: 700,
+                    letterSpacing: "0.12em",
                     textTransform: "uppercase",
-                    color: T.emeraldBr,
+                    color: "rgba(255,255,255,0.7)",
                     marginBottom: 16,
                   }}
                 >
@@ -261,9 +248,9 @@ export default function HomePage() {
                   style={{
                     fontFamily: T.fontDisplay,
                     fontSize: "clamp(24px,4vw,38px)",
-                    fontWeight: 700,
+                    fontWeight: 800,
                     letterSpacing: "-0.02em",
-                    color: T.white,
+                    color: "#ffffff",
                     marginBottom: 26,
                     lineHeight: 1.18,
                   }}
@@ -278,8 +265,8 @@ export default function HomePage() {
                     display: "inline-flex",
                     alignItems: "center",
                     gap: 8,
-                    background: `linear-gradient(135deg, ${T.emeraldBr}, ${T.emerald})`,
-                    color: T.emeraldInk,
+                    background: T.amber,
+                    color: "#ffffff",
                     fontSize: 14,
                     fontWeight: 700,
                     padding: "14px 26px",

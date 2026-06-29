@@ -23,6 +23,7 @@ export default function TestiCard({
         display: "flex",
         flexDirection: "column",
         gap: 16,
+        boxShadow: "0 1px 3px rgba(28,37,33,0.05)",
       }}
     >
       <div style={{ display: "flex", gap: 2 }}>
@@ -42,7 +43,7 @@ export default function TestiCard({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: T.emeraldBr,
+            color: T.emerald,
             fontSize: 13,
             fontWeight: 700,
             flexShrink: 0,

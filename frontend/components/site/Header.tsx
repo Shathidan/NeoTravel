@@ -20,7 +20,7 @@ export default function Header({ active }: { active?: string }) {
         position: "sticky",
         top: 0,
         zIndex: 200,
-        background: "rgba(10,18,14,0.82)",
+        background: "rgba(255,255,255,0.86)",
         backdropFilter: "blur(18px)",
         borderBottom: `1px solid ${T.line}`,
       }}
@@ -43,17 +43,16 @@ export default function Header({ active }: { active?: string }) {
               width: 30,
               height: 30,
               borderRadius: 8,
-              background: T.panelHi,
-              border: `1px solid ${T.lineStrong}`,
+              background: T.emerald,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: T.emeraldBr,
+              color: T.emeraldInk,
             }}
           >
             <IcoBus size={16} />
           </div>
-          <span style={{ fontFamily: T.fontDisplay, fontSize: 16, fontWeight: 700, letterSpacing: "-0.01em", color: T.white }}>
+          <span style={{ fontFamily: T.fontDisplay, fontSize: 16, fontWeight: 800, letterSpacing: "-0.01em", color: T.white }}>
             NeoTravel
           </span>
         </Link>
@@ -79,10 +78,10 @@ export default function Header({ active }: { active?: string }) {
               alignItems: "center",
               gap: 6,
               fontSize: 13,
-              fontWeight: 600,
+              fontWeight: 700,
               color: T.emeraldInk,
               textDecoration: "none",
-              background: `linear-gradient(135deg, ${T.emeraldBr}, ${T.emerald})`,
+              background: T.amber,
               padding: "8px 16px",
               borderRadius: 10,
               whiteSpace: "nowrap",
@@ -141,7 +140,7 @@ export default function Header({ active }: { active?: string }) {
                   fontWeight: 500,
                   color: active === n.href ? T.white : T.ash,
                   textDecoration: "none",
-                  borderBottom: `1px solid ${T.lineSoft}`,
+                  borderBottom: `1px solid ${T.line}`,
                 }}
               >
                 {n.label}

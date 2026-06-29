@@ -28,12 +28,12 @@ export default function FlottePage() {
               <span
                 style={{
                   display: "block",
-                  fontFamily: T.fontMono,
+                  fontFamily: T.fontBody,
                   fontSize: 11,
-                  fontWeight: 500,
-                  letterSpacing: "0.16em",
+                  fontWeight: 700,
+                  letterSpacing: "0.14em",
                   textTransform: "uppercase",
-                  color: T.emeraldBr,
+                  color: T.emerald,
                   marginBottom: 14,
                 }}
               >
@@ -43,7 +43,7 @@ export default function FlottePage() {
                 style={{
                   fontFamily: T.fontDisplay,
                   fontSize: "clamp(28px,4.6vw,48px)",
-                  fontWeight: 700,
+                  fontWeight: 800,
                   letterSpacing: "-0.02em",
                   color: T.white,
                   lineHeight: 1.12,
@@ -86,6 +86,7 @@ export default function FlottePage() {
                     display: "flex",
                     flexDirection: "column",
                     gap: 14,
+                    boxShadow: "0 1px 3px rgba(28,37,33,0.05)",
                   }}
                 >
                   <div
@@ -98,7 +99,7 @@ export default function FlottePage() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      color: T.emeraldBr,
+                      color: T.emerald,
                     }}
                   >
                     {c.icon}
@@ -119,6 +120,7 @@ export default function FlottePage() {
                 border: `1px solid ${T.line}`,
                 padding: "44px 32px",
                 textAlign: "center",
+                boxShadow: "0 1px 3px rgba(28,37,33,0.05)",
               }}
             >
               <p style={{ fontSize: 16, color: T.white, marginBottom: 22, lineHeight: 1.6 }}>
@@ -130,8 +132,8 @@ export default function FlottePage() {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: 8,
-                  background: `linear-gradient(135deg, ${T.emeraldBr}, ${T.emerald})`,
-                  color: T.emeraldInk,
+                  background: T.amber,
+                  color: "#ffffff",
                   fontSize: 14,
                   fontWeight: 700,
                   padding: "13px 24px",

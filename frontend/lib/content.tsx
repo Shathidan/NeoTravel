@@ -97,7 +97,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: "Quelles zones desservez-vous ?",
-    a: "Tous les trajets de groupe en France et au Maroc, et à l'international sur demande spécifique.",
+    a: "Tous les trajets de groupe en France métropolitaine, et à l'international sur demande spécifique (Europe notamment).",
   },
   {
     q: "Quels types de véhicules proposez-vous ?",

@@ -9,7 +9,7 @@ import { T } from "./theme";
 export default function GlobalStyles() {
   return (
     <style>{`
-      @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       html { scroll-behavior: smooth; }
@@ -22,13 +22,9 @@ export default function GlobalStyles() {
       ::-webkit-scrollbar { width: 3px; height: 3px; }
       ::-webkit-scrollbar-thumb { background: ${T.lineStrong}; border-radius: 3px; }
 
-      @keyframes rt-blink   { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+      @keyframes rt-blink   { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
       @keyframes rt-fade    { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
-      @keyframes rt-rise    { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-      @keyframes rt-glow    { 0%,100% { box-shadow: 0 0 0 0 rgba(63,207,156,0); } 50% { box-shadow: 0 0 0 3px rgba(63,207,156,0.10); } }
-      @keyframes rt-drift   { 0% { background-position: 0 0; } 100% { background-position: 200px 0; } }
       @keyframes rt-bus     { 0% { left: 0%; } 100% { left: calc(100% - 22px); } }
-      @keyframes rt-spin    { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }

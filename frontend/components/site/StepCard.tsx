@@ -23,15 +23,16 @@ export default function StepCard({
         display: "flex",
         flexDirection: "column",
         gap: 16,
+        boxShadow: "0 1px 3px rgba(28,37,33,0.05)",
       }}
     >
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span
           style={{
-            fontFamily: T.fontMono,
+            fontFamily: T.fontBody,
             fontSize: 11,
-            fontWeight: 600,
-            letterSpacing: "0.12em",
+            fontWeight: 700,
+            letterSpacing: "0.08em",
             color: T.ashDim,
           }}
         >
@@ -47,7 +48,7 @@ export default function StepCard({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: T.emeraldBr,
+            color: T.emerald,
           }}
         >
           {icon}

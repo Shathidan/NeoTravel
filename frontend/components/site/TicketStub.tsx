@@ -3,9 +3,7 @@ import type { ReactNode } from "react";
 import { T } from "./theme";
 
 /* ═══════════════════════════════════════════════════════════════
-   TICKET STUB — écho discret du billet signature, utilisé pour les
-   statistiques chiffrées. Bordure perforée sur le bord supérieur,
-   chiffre en monospace façon compteur de tableau d'affichage.
+   STAT CARD — chiffre clé mis en avant, présentation sobre.
 ═══════════════════════════════════════════════════════════════ */
 export default function TicketStub({
   value,
@@ -27,23 +25,9 @@ export default function TicketStub({
         borderRadius: 18,
         padding: "30px 22px 26px",
         textAlign: "center",
-        overflow: "hidden",
+        boxShadow: "0 1px 3px rgba(28,37,33,0.05)",
       }}
     >
-      {/* bord perforé */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 1,
-          backgroundImage: `radial-gradient(circle, ${T.ink} 1.6px, transparent 1.6px)`,
-          backgroundSize: "10px 1px",
-          backgroundRepeat: "repeat-x",
-          backgroundPosition: "0 -1px",
-        }}
-      />
       <div
         style={{
           width: 40,
@@ -55,16 +39,16 @@ export default function TicketStub({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: T.emeraldBr,
+          color: T.emerald,
         }}
       >
         {icon}
       </div>
       <p
         style={{
-          fontFamily: T.fontMono,
+          fontFamily: T.fontDisplay,
           fontSize: 34,
-          fontWeight: 600,
+          fontWeight: 800,
           letterSpacing: "-0.02em",
           color: T.white,
           lineHeight: 1,
