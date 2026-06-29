@@ -296,7 +296,7 @@ def _bloc_tarification(styles, result: dict):
         Paragraph(_fmt_eur(d["marge"]["montant"]), s["cell_right"]),
     ])
 
-    # Sous-total HT
+    # Sous-total Hors taxes
     lignes.append([
         Paragraph("TOTAL HT", ParagraphStyle(
             "ht", fontName="Helvetica-Bold", fontSize=9,
