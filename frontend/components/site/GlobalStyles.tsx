@@ -34,6 +34,12 @@ export default function GlobalStyles() {
       /* Ring pulsant discret autour de la fenêtre de chat */
       @keyframes rt-ring-pulse { 0%,100% { opacity: 0.16; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.012); } }
 
+      /* Micro-interactions de la console assistant */
+      @keyframes rt-pop-in       { 0% { opacity: 0; transform: scale(0.85) translateY(4px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+      @keyframes rt-row-flash    { 0% { background: rgba(15,110,92,0.14); } 100% { background: transparent; } }
+      @keyframes rt-typing-bounce{ 0%,60%,100% { transform: translateY(0); opacity: 0.45; } 30% { transform: translateY(-4px); opacity: 1; } }
+      @keyframes rt-status-ping  { 0% { transform: scale(1); opacity: 0.55; } 100% { transform: scale(2.6); opacity: 0; } }
+
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
       }
