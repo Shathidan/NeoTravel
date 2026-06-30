@@ -12,7 +12,7 @@ export default function GlobalStyles() {
       @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      html { scroll-behavior: smooth; }
+      html { scroll-behavior: smooth; scroll-padding-top: 76px; }
       body { background: ${T.ink}; color: ${T.white}; }
       a { color: inherit; }
       input, button, textarea { font-family: inherit; }

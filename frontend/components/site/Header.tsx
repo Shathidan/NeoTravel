@@ -20,8 +20,7 @@ export default function Header({ active }: { active?: string }) {
         position: "sticky",
         top: 0,
         zIndex: 200,
-        background: "rgba(255,255,255,0.86)",
-        backdropFilter: "blur(18px)",
+        background: T.panel,
         borderBottom: `1px solid ${T.line}`,
       }}
     >
