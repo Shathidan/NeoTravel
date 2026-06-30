@@ -132,19 +132,35 @@ export default function AssistantConsole() {
     send(t);
   };
 
+  const chatHeight = Math.min(380 + Math.max(msgs.length - 1, 0) * 86, 620);
+
   return (
     <section id="assistant" style={{ position: "relative" }}>
-      <div className="rt-hero" style={{ display: "flex", flexDirection: "column", gap: 24, alignItems: "stretch" }}>
+      {/* halo doux qui fait ressortir l'ensemble récapitulatif + chat du reste de la page */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: "-48px -24px",
+          background: `radial-gradient(ellipse 65% 65% at 50% 45%, rgba(15,110,92,0.09), transparent 70%)`,
+          zIndex: 0,
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        className="rt-hero"
+        style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", gap: 24, alignItems: "stretch" }}
+      >
         {/* ── Carte récapitulative (gauche) ───────────────────────────── */}
         <div style={{ flex: "0 0 320px", display: "flex", flexDirection: "column" }}>
           <div
             style={{
               position: "relative",
               background: T.panel,
-              border: `1px solid ${T.line}`,
+              border: `1px solid ${T.lineStrong}`,
               borderRadius: 18,
               overflow: "hidden",
-              boxShadow: "0 8px 28px rgba(28,37,33,0.08)",
+              boxShadow: "0 16px 44px rgba(28,37,33,0.14), 0 2px 8px rgba(28,37,33,0.06)",
             }}
           >
             <div style={{ padding: "20px 22px 6px" }}>
@@ -248,17 +264,33 @@ export default function AssistantConsole() {
         </div>
 
         {/* ── Console de discussion (droite) ──────────────────────────── */}
-        <div style={{ flex: "1 1 0", minWidth: 0 }}>
+        <div style={{ flex: "1 1 0", minWidth: 0, position: "relative" }}>
+          {/* ring discret signalant l'élément central de la page */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              inset: -7,
+              borderRadius: 27,
+              border: `1.5px solid ${T.emerald}`,
+              opacity: 0.18,
+              pointerEvents: "none",
+              zIndex: 0,
+              animation: "rt-ring-pulse 4.5s ease-in-out infinite",
+            }}
+          />
           <div
             style={{
+              position: "relative",
+              zIndex: 1,
               display: "flex",
               flexDirection: "column",
-              height: "66vh",
-              minHeight: 460,
+              height: chatHeight,
               borderRadius: 20,
-              border: `1px solid ${T.line}`,
+              border: `1px solid ${T.lineStrong}`,
               background: T.panel,
-              boxShadow: "0 8px 28px rgba(28,37,33,0.08)",
+              boxShadow: "0 16px 44px rgba(28,37,33,0.14), 0 2px 8px rgba(28,37,33,0.06)",
+              transition: "height .4s ease",
             }}
           >
             <div
@@ -284,7 +316,18 @@ export default function AssistantConsole() {
               <span style={{ fontFamily: T.fontBody, fontSize: 12, color: T.ashDim }}>— en ligne</span>
             </div>
 
-            <div style={{ flex: 1, overflowY: "auto", padding: 18, display: "flex", flexDirection: "column", gap: 10 }}>
+            <div
+              style={{
+                flex: 1,
+                overflowY: "auto",
+                padding: 18,
+                display: "flex",
+                flexDirection: "column",
+                gap: 10,
+                backgroundImage: `radial-gradient(${T.lineSoft} 1px, transparent 1px)`,
+                backgroundSize: "18px 18px",
+              }}
+            >
               {msgs.map((m) => (
                 <div
                   key={m.id}

@@ -47,6 +47,59 @@ export default function HomePage() {
               }}
             />
 
+            {/* fond animé sobre : formes organiques floues, très calmes, jamais au-dessus du contenu */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                top: "-12%",
+                left: "-8%",
+                width: 480,
+                height: 480,
+                borderRadius: "50%",
+                background: T.emerald,
+                opacity: 0.07,
+                filter: "blur(90px)",
+                zIndex: 0,
+                pointerEvents: "none",
+                animation: "rt-blob-a 22s ease-in-out infinite",
+              }}
+            />
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                top: "2%",
+                right: "-10%",
+                width: 420,
+                height: 420,
+                borderRadius: "50%",
+                background: T.emerald,
+                opacity: 0.06,
+                filter: "blur(90px)",
+                zIndex: 0,
+                pointerEvents: "none",
+                animation: "rt-blob-b 26s ease-in-out infinite",
+              }}
+            />
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                bottom: "-18%",
+                left: "32%",
+                width: 380,
+                height: 380,
+                borderRadius: "50%",
+                background: T.amber,
+                opacity: 0.05,
+                filter: "blur(90px)",
+                zIndex: 0,
+                pointerEvents: "none",
+                animation: "rt-blob-c 19s ease-in-out infinite",
+              }}
+            />
+
             <section style={{ maxWidth: 1200, margin: "0 auto", padding: "60px 24px 56px", position: "relative", zIndex: 1 }}>
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 26 }}>
                 <div

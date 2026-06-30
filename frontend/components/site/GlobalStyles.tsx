@@ -26,6 +26,14 @@ export default function GlobalStyles() {
       @keyframes rt-fade    { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
       @keyframes rt-bus     { 0% { left: 0%; } 100% { left: calc(100% - 22px); } }
 
+      /* Fond animé du hero — formes organiques, transform + opacity uniquement */
+      @keyframes rt-blob-a  { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(36px,-28px) scale(1.08); } }
+      @keyframes rt-blob-b  { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-30px,24px) scale(1.06); } }
+      @keyframes rt-blob-c  { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(22px,20px) scale(0.94); } }
+
+      /* Ring pulsant discret autour de la fenêtre de chat */
+      @keyframes rt-ring-pulse { 0%,100% { opacity: 0.16; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.012); } }
+
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
       }
